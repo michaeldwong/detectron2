@@ -251,6 +251,7 @@ def _create_text_labels(classes, scores, class_names, is_crowd=None):
             labels = ["{} {:.0f}%".format(l, s * 100) for l, s in zip(labels, scores)]
     if labels is not None and is_crowd is not None:
         labels = [l + ("|crowd" if crowd else "") for l, crowd in zip(labels, is_crowd)]
+    print("LABELS: ", labels)
     return labels
 
 
@@ -396,6 +397,10 @@ class Visualizer:
         scores = predictions.scores if predictions.has("scores") else None
         classes = predictions.pred_classes.tolist() if predictions.has("pred_classes") else None
         labels = _create_text_labels(classes, scores, self.metadata.get("thing_classes", None))
+        if labels is not None and boxes is not None:
+            for i in range(0,len(boxes)):
+                print(boxes[i])
+                print(labels[i])
         keypoints = predictions.pred_keypoints if predictions.has("pred_keypoints") else None
 
         if predictions.has("pred_masks"):
