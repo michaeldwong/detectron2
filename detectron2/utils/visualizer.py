@@ -380,7 +380,7 @@ class Visualizer:
         self._instance_mode = instance_mode
         self.keypoint_threshold = _KEYPOINT_THRESHOLD
 
-    def draw_instance_predictions(self, predictions, pid):
+    def draw_instance_predictions(self, predictions, pid, frame_id):
         """
         Draw instance-level prediction results on an image.
 
@@ -397,7 +397,12 @@ class Visualizer:
         classes = predictions.pred_classes.tolist() if predictions.has("pred_classes") else None
         labels = _create_text_labels(classes, scores, self.metadata.get("thing_classes", None))
 #        print('Current PID = ', pid)
-        with open(f'{pid}-predictions.csv', 'w') as f:
+        if frame_id == '-1':
+            csv_file = f'{pid}-predictions.csv'
+        else:
+            csv_file = f'{pid}-{frame_id}-predictions.csv'
+        print('Writing to ', csv_file)
+        with open(csv_file, 'w') as f:
             f.write('left,top,right,bottom,class,confidence\n')
             if labels is not None and boxes is not None:
                 for i in range(0,len(boxes)):

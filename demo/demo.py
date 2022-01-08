@@ -52,6 +52,12 @@ def get_parser():
         help="A list of space separated input images; "
         "or a single glob pattern such as 'directory/*.jpg'",
     )
+    parser.add_argument(
+        "--frames",
+        nargs="+",
+        help="A list of space separated frame names; ",
+    )
+
 #    parser.add_argument(
 #        "--output",
 #        help="PID for controllable camera experiments",
@@ -109,11 +115,15 @@ if __name__ == "__main__":
         if len(args.input) == 1:
             args.input = glob.glob(os.path.expanduser(args.input[0]))
             assert args.input, "The input path(s) was not found"
-        for path in tqdm.tqdm(args.input):
+        for i,path in enumerate(tqdm.tqdm(args.input)):
             # use PIL, to be consistent with evaluation
             img = read_image(path, format="BGR")
+
             start_time = time.time()
-            predictions, visualized_output = demo.run_on_image(img, args.pid)
+            if args.frames:
+                predictions, visualized_output = demo.run_on_image(img, args.pid, args.frames[i])
+            else:
+                predictions, visualized_output = demo.run_on_image(img, args.pid)
             logger.info(
                 "{}: {} in {:.2f}s".format(
                     path,
