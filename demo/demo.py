@@ -1,4 +1,4 @@
-# Copyright (c) Facebook, Inc. and its affiliates.
+# Copyright (c) Fcebook, Inc. and its affiliates.
 import argparse
 import glob
 import multiprocessing as mp
@@ -58,10 +58,10 @@ def get_parser():
         help="A list of space separated frame names; ",
     )
 
-#    parser.add_argument(
-#        "--output",
-#        help="PID for controllable camera experiments",
-#    )
+    parser.add_argument(
+        "--output",
+        action="store_true",
+    )
 
     parser.add_argument(
         "--pid",
@@ -134,19 +134,8 @@ if __name__ == "__main__":
                 )
             )
 
-#            if args.output:
-#                if os.path.isdir(args.output):
-#                    assert os.path.isdir(args.output), args.output
-#                    out_filename = os.path.join(args.output, os.path.basename(path))
-#                else:
-#                    assert len(args.input) == 1, "Please specify a directory with args.output"
-#                    out_filename = args.output
-#                visualized_output.save(out_filename)
-#            else:
-#                cv2.namedWindow(WINDOW_NAME, cv2.WINDOW_NORMAL)
-#                cv2.imshow(WINDOW_NAME, visualized_output.get_image()[:, :, ::-1])
-#                if cv2.waitKey(0) == 27:
-#                    break  # esc to quit
+            if args.output:
+                visualized_output.save('predictions.jpg')
     elif args.webcam:
         assert args.input is None, "Cannot have both --input and --webcam!"
         assert args.output is None, "output not yet supported with --webcam!"
